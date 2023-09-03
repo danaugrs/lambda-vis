@@ -1,6 +1,5 @@
 import * as d3 from "d3";
 import { Node, NodeID } from "./runtime.ts";
-import { theme } from "../components/ThemeToggle.tsx";
 
 // Constants
 export const DIST_Y = 40;
@@ -35,12 +34,13 @@ export function drawNode(
   x: number,
   y: number,
   label: string,
+  theme: "light" | "dark"
 ) {
   svg
     .append("circle")
     .attr("cx", x)
     .attr("cy", y)
-    .attr("fill", theme.value === "light" ? "#FFF" : "#222")
+    .attr("fill", theme === "light" ? "#FFF" : "#222")
     .attr("r", 15);
   svg
     .append("text")
@@ -48,7 +48,7 @@ export function drawNode(
     .attr("y", y)
     .attr("text-anchor", "middle")
     .attr("dominant-baseline", "middle")
-    .attr("fill", theme.value === "light" ? "#222" : "#FFF")
+    .attr("fill", theme === "light" ? "#222" : "#FFF")
     .style("font-size", "20px")
     .text(label);
 }
@@ -61,7 +61,8 @@ export function drawEdge(
   endX: number,
   endY: number,
   endPort: Port,
-  s?: number,
+  theme: "light" | "dark",
+  s?: number
 ) {
   const path = d3.path();
   path.moveTo(startX, startY);
@@ -73,12 +74,12 @@ export function drawEdge(
     endX + deltaEndX,
     endY + deltaEndY,
     endX,
-    endY,
+    endY
   );
   svg
     .append("path")
     .attr("d", path.toString())
-    .attr("stroke", theme.value === "light" ? "#222" : "#FFF")
+    .attr("stroke", theme === "light" ? "#222" : "#FFF")
     .attr("fill", "none");
 }
 
@@ -90,6 +91,7 @@ export function draw(
   parentNodeId: NodeID,
   x: number,
   y: number,
+  theme: "light" | "dark"
 ): {
   widthRight: number;
   widthLeft: number;
@@ -119,16 +121,17 @@ export function draw(
         nodeId,
         x,
         y + DIST_Y,
+        theme
       );
 
       const [boundVars, freeVars] = vars.reduce(
         ([b, f]: [any[], any[]], e) =>
           e.name === node.param ? [[...b, e], f] : [b, [...f, e]],
-        [[], []],
+        [[], []]
       );
 
-      drawEdge(edgeGroup, x, y, "s", x, y + DIST_Y, "n");
-      drawNode(nodeGroup, x, y, `λ${node.param}`);
+      drawEdge(edgeGroup, x, y, "s", x, y + DIST_Y, "n", theme);
+      drawNode(nodeGroup, x, y, `λ${node.param}`, theme);
 
       boundVars.forEach((v) => {
         const path = d3.path();
@@ -138,18 +141,18 @@ export function draw(
           y + (height + 1) * DIST_Y,
           x - widthLeft * DIST_X,
           y + (height + 1) * DIST_Y,
-          RADIUS,
+          RADIUS
         );
         edgeGroup
           .append("path")
           .attr("d", path.toString())
-          .attr("stroke", theme.value === "light" ? "#222" : "#FFF")
+          .attr("stroke", theme === "light" ? "#222" : "#FFF")
           .attr("fill", "none");
       });
 
       const maxX = boundVars.reduce(
-        (acc, v) => v.x > acc ? v.x : acc,
-        -Infinity,
+        (acc, v) => (v.x > acc ? v.x : acc),
+        -Infinity
       );
 
       if (boundVars.length > 0) {
@@ -160,20 +163,20 @@ export function draw(
           y,
           x - widthLeft * DIST_X,
           y + (height + 1) * DIST_Y,
-          RADIUS,
+          RADIUS
         );
         path.arcTo(
           x - widthLeft * DIST_X,
           y + (height + 1) * DIST_Y,
           x,
           y + (height + 1) * DIST_Y,
-          RADIUS,
+          RADIUS
         );
         path.lineTo(maxX - RADIUS, y + (height + 1) * DIST_Y);
         edgeGroup
           .append("path")
           .attr("d", path.toString())
-          .attr("stroke", theme.value === "light" ? "#222" : "#FFF")
+          .attr("stroke", theme === "light" ? "#222" : "#FFF")
           .attr("fill", "none");
       }
 
@@ -184,34 +187,28 @@ export function draw(
         y,
         x + widthRight * DIST_X,
         y + (height + 1) * DIST_Y,
-        RADIUS,
+        RADIUS
       );
       path2.arcTo(
         x + widthRight * DIST_X,
         y + (height + 1) * DIST_Y,
         x - widthLeft * DIST_X,
         y + (height + 1) * DIST_Y,
-        RADIUS,
+        RADIUS
       );
       path2.arcTo(
         x - widthLeft * DIST_X,
         y + (height + 1) * DIST_Y,
         x - widthLeft * DIST_X,
         y,
-        RADIUS,
+        RADIUS
       );
-      path2.arcTo(
-        x - widthLeft * DIST_X,
-        y,
-        x,
-        y,
-        RADIUS,
-      );
+      path2.arcTo(x - widthLeft * DIST_X, y, x, y, RADIUS);
       path2.lineTo(x, y);
       edgeGroup
         .append("path")
         .attr("d", path2.toString())
-        .attr("stroke", theme.value === "light" ? "#222" : "#FFF")
+        .attr("stroke", theme === "light" ? "#222" : "#FFF")
         .attr("stroke-dasharray", "4,6")
         .attr("fill", "none");
       return {
@@ -224,7 +221,7 @@ export function draw(
       };
     } else {
       // Variable node
-      drawNode(nodeGroup, x, y, node.param);
+      drawNode(nodeGroup, x, y, node.param, theme);
       return {
         widthLeft: 1,
         widthRight: 1,
@@ -242,7 +239,16 @@ export function draw(
       vars: varsLeft,
       nodeGroup: nodeGroupLeft,
       edgeGroup: edgeGroupLeft,
-    } = draw(nodeGroup, edgeGroup, graph, node.func, nodeId, x, y + DIST_Y);
+    } = draw(
+      nodeGroup,
+      edgeGroup,
+      graph,
+      node.func,
+      nodeId,
+      x,
+      y + DIST_Y,
+      theme
+    );
     const {
       widthLeft: widthLeftRight,
       widthRight: widthRightRight,
@@ -250,12 +256,39 @@ export function draw(
       vars: varsRight,
       nodeGroup: nodeGroupRight,
       edgeGroup: edgeGroupRight,
-    } = draw(nodeGroup, edgeGroup, graph, node.arg, nodeId, x, y + DIST_Y);
+    } = draw(
+      nodeGroup,
+      edgeGroup,
+      graph,
+      node.arg,
+      nodeId,
+      x,
+      y + DIST_Y,
+      theme
+    );
 
     const spread = (widthRightLeft + widthLeftRight) / 2;
-    drawEdge(edgeGroup, x, y, "sw", x - spread * DIST_X, y + DIST_Y, "n");
-    drawEdge(edgeGroup, x, y, "se", x + spread * DIST_X, y + DIST_Y, "n");
-    drawNode(nodeGroup, x, y, `@`);
+    drawEdge(
+      edgeGroup,
+      x,
+      y,
+      "sw",
+      x - spread * DIST_X,
+      y + DIST_Y,
+      "n",
+      theme
+    );
+    drawEdge(
+      edgeGroup,
+      x,
+      y,
+      "se",
+      x + spread * DIST_X,
+      y + DIST_Y,
+      "n",
+      theme
+    );
+    drawNode(nodeGroup, x, y, `@`, theme);
 
     nodeGroupLeft?.attr("transform", `translate(${-spread * DIST_X}, 0)`);
     edgeGroupLeft?.attr("transform", `translate(${-spread * DIST_X}, 0)`);

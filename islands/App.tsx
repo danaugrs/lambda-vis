@@ -4,7 +4,7 @@ import { parse, ParseResult } from "../lib/parser.gen.ts";
 import { useSignal } from "@preact/signals";
 import { Graph, parseNode } from "../lib/runtime.ts";
 import * as d3 from "d3";
-import { theme, ThemeToggle } from "../components/ThemeToggle.tsx";
+import { ThemeToggle } from "../components/ThemeToggle.tsx";
 import { Graph as LambdaGraph } from "./Graph.tsx";
 import { Head } from "$fresh/runtime.ts";
 
@@ -21,8 +21,17 @@ const cleanExpr = (expr: string) =>
     .trim();
 
 export default function App() {
+  // Expression
   const storedExpr = localStorage.getItem("expr");
   const expression = useSignal<string>(storedExpr || "λx.λf.f (f x)");
+
+  // Theme
+  const storedTheme = localStorage.getItem("theme");
+  const theme = useSignal<"light" | "dark">(
+    (storedTheme as "light" | "dark") || "dark"
+  );
+
+  // AST
   const ast = useSignal<ParseResult | null>(null);
 
   const onInput = (e: any) => {
@@ -70,6 +79,7 @@ export default function App() {
         "root",
         0,
         DIST_Y,
+        theme.value
       );
       const width = widthLeft + widthRight;
 
@@ -78,15 +88,15 @@ export default function App() {
       const rect = graphEl.getBoundingClientRect();
       const scale = Math.min(
         rect.width / (width * DIST_X),
-        rect.height / ((height + 1) * DIST_Y),
+        rect.height / ((height + 1) * DIST_Y)
       );
       nodeGroup?.attr(
         "transform",
-        `translate(${widthLeft * 25 * scale}, 0) scale(${scale})`,
+        `translate(${widthLeft * 25 * scale}, 0) scale(${scale})`
       );
       edgeGroup?.attr(
         "transform",
-        `translate(${widthLeft * 25 * scale}, 0) scale(${scale})`,
+        `translate(${widthLeft * 25 * scale}, 0) scale(${scale})`
       );
     }
   };
@@ -101,9 +111,7 @@ export default function App() {
   return (
     <>
       <Head>
-        <title>
-          Visualization of λ-Calculi Expressions
-        </title>
+        <title>Visualization of λ-Calculi Expressions</title>
       </Head>
       <div
         id="main"
@@ -116,9 +124,7 @@ export default function App() {
         }}
       >
         <div class="flex flex-row justify-between w-full space-x-1">
-          <p class="mb-2 text-xl">
-            Visualization of λ-Calculi Expressions
-          </p>
+          <p class="mb-2 text-xl">Visualization of λ-Calculi Expressions</p>
           <div class="flex flex-row align-center space-x-1">
             <a
               class="h-8 w-8 flex items-center justify-center rounded border-1"
@@ -131,12 +137,10 @@ export default function App() {
             >
               <GitHubIcon />
             </a>
-            <ThemeToggle />
+            <ThemeToggle theme={theme} />
           </div>
         </div>
-        <p class="mb-4">
-          Type a λ-calculi expression below. Backslash = λ.
-        </p>
+        <p class="mb-4">Type a λ-calculi expression below. Backslash = λ.</p>
         <div class="flex gap-2 w-full flex-col flex-1 bg-inherit">
           <div class="flex flex-row gap-2 items-stretch">
             <input
@@ -148,15 +152,16 @@ export default function App() {
               style={{
                 borderColor: theme.value === "light" ? "#000D" : "#FFF6",
                 background: theme.value === "light" ? "#EEED" : "#0006",
-                color: expression.value.length && ast.value?.errs.length
-                  ? "red"
-                  : "inherit",
+                color:
+                  expression.value.length && ast.value?.errs.length
+                    ? "red"
+                    : "inherit",
               }}
               value={expression.value}
               onInput={onInput}
             />
           </div>
-          <LambdaGraph />
+          <LambdaGraph theme={theme.value} />
         </div>
       </div>
     </>
@@ -167,8 +172,7 @@ const GitHubIcon = () => {
   return (
     <svg width="24" height="24" fill="currentColor" viewBox="3 3 18 18">
       <title>GitHub</title>
-      <path d="M12 3C7.0275 3 3 7.12937 3 12.2276C3 16.3109 5.57625 19.7597 9.15374 20.9824C9.60374 21.0631 9.77249 20.7863 9.77249 20.5441C9.77249 20.3249 9.76125 19.5982 9.76125 18.8254C7.5 19.2522 6.915 18.2602 6.735 17.7412C6.63375 17.4759 6.19499 16.6569 5.8125 16.4378C5.4975 16.2647 5.0475 15.838 5.80124 15.8264C6.51 15.8149 7.01625 16.4954 7.18499 16.7723C7.99499 18.1679 9.28875 17.7758 9.80625 17.5335C9.885 16.9337 10.1212 16.53 10.38 16.2993C8.3775 16.0687 6.285 15.2728 6.285 11.7432C6.285 10.7397 6.63375 9.9092 7.20749 9.26326C7.1175 9.03257 6.8025 8.08674 7.2975 6.81794C7.2975 6.81794 8.05125 6.57571 9.77249 7.76377C10.4925 7.55615 11.2575 7.45234 12.0225 7.45234C12.7875 7.45234 13.5525 7.55615 14.2725 7.76377C15.9937 6.56418 16.7475 6.81794 16.7475 6.81794C17.2424 8.08674 16.9275 9.03257 16.8375 9.26326C17.4113 9.9092 17.76 10.7281 17.76 11.7432C17.76 15.2843 15.6563 16.0687 13.6537 16.2993C13.98 16.5877 14.2613 17.1414 14.2613 18.0065C14.2613 19.2407 14.25 20.2326 14.25 20.5441C14.25 20.7863 14.4188 21.0746 14.8688 20.9824C16.6554 20.364 18.2079 19.1866 19.3078 17.6162C20.4077 16.0457 20.9995 14.1611 21 12.2276C21 7.12937 16.9725 3 12 3Z">
-      </path>
+      <path d="M12 3C7.0275 3 3 7.12937 3 12.2276C3 16.3109 5.57625 19.7597 9.15374 20.9824C9.60374 21.0631 9.77249 20.7863 9.77249 20.5441C9.77249 20.3249 9.76125 19.5982 9.76125 18.8254C7.5 19.2522 6.915 18.2602 6.735 17.7412C6.63375 17.4759 6.19499 16.6569 5.8125 16.4378C5.4975 16.2647 5.0475 15.838 5.80124 15.8264C6.51 15.8149 7.01625 16.4954 7.18499 16.7723C7.99499 18.1679 9.28875 17.7758 9.80625 17.5335C9.885 16.9337 10.1212 16.53 10.38 16.2993C8.3775 16.0687 6.285 15.2728 6.285 11.7432C6.285 10.7397 6.63375 9.9092 7.20749 9.26326C7.1175 9.03257 6.8025 8.08674 7.2975 6.81794C7.2975 6.81794 8.05125 6.57571 9.77249 7.76377C10.4925 7.55615 11.2575 7.45234 12.0225 7.45234C12.7875 7.45234 13.5525 7.55615 14.2725 7.76377C15.9937 6.56418 16.7475 6.81794 16.7475 6.81794C17.2424 8.08674 16.9275 9.03257 16.8375 9.26326C17.4113 9.9092 17.76 10.7281 17.76 11.7432C17.76 15.2843 15.6563 16.0687 13.6537 16.2993C13.98 16.5877 14.2613 17.1414 14.2613 18.0065C14.2613 19.2407 14.25 20.2326 14.25 20.5441C14.25 20.7863 14.4188 21.0746 14.8688 20.9824C16.6554 20.364 18.2079 19.1866 19.3078 17.6162C20.4077 16.0457 20.9995 14.1611 21 12.2276C21 7.12937 16.9725 3 12 3Z"></path>
     </svg>
   );
 };
