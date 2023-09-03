@@ -1,6 +1,8 @@
-# Visualization of λ-Calculi Expressions
+# λ-Calculi Expression Visualizer
 
 This project visualizes λ-calculi expressions as graphs.
+
+![/screenshot.png](/screenshot.png)
 
 ### Usage
 
