@@ -78,7 +78,7 @@ export default function App() {
       const rect = graphEl.getBoundingClientRect();
       const scale = Math.min(
         rect.width / (width * DIST_X),
-        rect.height / (height * DIST_Y),
+        rect.height / ((height + 1) * DIST_Y),
       );
       nodeGroup?.attr(
         "transform",
