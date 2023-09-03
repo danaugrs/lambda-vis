@@ -49,11 +49,9 @@ export function Graph({ theme }: { theme: "light" | "dark" }) {
         } else if (e.type === "touchmove") {
           e.preventDefault();
           translate.value = {
-            x:
-              translate.value.x +
+            x: translate.value.x +
               (e.touches[0].clientX - lastPos.value.x) / scale.value,
-            y:
-              translate.value.y +
+            y: translate.value.y +
               (e.touches[0].clientY - lastPos.value.y) / scale.value,
           };
         }
@@ -66,7 +64,7 @@ export function Graph({ theme }: { theme: "light" | "dark" }) {
       }
     };
     addEventListener("mousemove", move);
-    addEventListener("touchmove", move);
+    addEventListener("touchmove", move, { passive: false });
 
     // Mouse wheel
     const wheel = (e: any) => {
@@ -133,7 +131,8 @@ export function Graph({ theme }: { theme: "light" | "dark" }) {
               cy="8"
               r="1"
               fill={theme === "light" ? "#0004" : "#FFF3"}
-            ></circle>
+            >
+            </circle>
           </pattern>
           <rect
             id="background"
