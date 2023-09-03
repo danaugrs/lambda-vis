@@ -1,0 +1,7 @@
+start := main=main $
+main := application | term
+term := abstraction | identifier=identifier | group
+abstraction := 'λ' parameter=identifier '\.' body=main
+application := func=main ' '? arg=term
+group := '\(' group=main '\)'
+identifier := '[a-zA-Z0-9_]+'
