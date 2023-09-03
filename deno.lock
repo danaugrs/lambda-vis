@@ -286,7 +286,7 @@
     "https://deno.land/x/ts_morph@17.0.1/mod.ts": "adba9b82f24865d15d2c78ef6074b9a7457011719056c9928c800f130a617c93",
     "https://deno.land/x/ts_morph@17.0.1/ts_morph.js": "1bb80284b9e31a4c5c2078cd533fe9b12b4b2d710267055cb655225aa88fb2df",
     "https://esm.sh/stable/preact@10.15.1/denonext/debug.js": "e8e5e198bd48c93d484c91c4c78af1900bd81d9bfcfd543e8ac75216f5404c10",
-    "https://esm.sh/stable/preact@10.15.1/denonext/devtools.js": "9357ad4ccf9ec29ee9a0401876d749177c400da4bbcdcffa9be3b212409702a6",
+    "https://esm.sh/stable/preact@10.15.1/denonext/devtools.js": "7e3009ee2208a6cc8bbf747b61e9468d177ef55d94cf9b774ad2a6c926ae51cb",
     "https://esm.sh/stable/preact@10.15.1/denonext/hooks.js": "5c989ad368cf4f2cb3a5d7d1801843d9348c599fe3e7731d04728f7b845d724e",
     "https://esm.sh/stable/preact@10.15.1/denonext/jsx-runtime.js": "52806054f5b3477005ab4bdc17de3d219ccc6c130d0cd803c45667b0cac2f6ed",
     "https://esm.sh/stable/preact@10.15.1/denonext/preact.mjs": "30710ac1d5ff3711ae0c04eddbeb706f34f82d97489f61aaf09897bc75d2a628",
