@@ -6,7 +6,7 @@ import { Graph, parseNode } from "../lib/runtime.ts";
 import * as d3 from "d3";
 import { ThemeToggle } from "../components/ThemeToggle.tsx";
 import { Graph as LambdaGraph } from "./Graph.tsx";
-import { Head } from "$fresh/runtime.ts";
+import { Head, IS_BROWSER } from "$fresh/runtime.ts";
 
 const prettifyExpr = (expr: string) => expr.replaceAll("\\", "λ");
 const cleanExpr = (expr: string) =>
@@ -21,12 +21,13 @@ const cleanExpr = (expr: string) =>
     .trim();
 
 export default function App() {
+
   // Expression
-  const storedExpr = window.localStorage.getItem("expr");
+  const storedExpr = IS_BROWSER && window.localStorage.getItem("expr");
   const expression = useSignal<string>(storedExpr || "λx.λf.f (f x)");
 
   // Theme
-  const storedTheme = window.localStorage.getItem("theme");
+  const storedTheme = IS_BROWSER && window.localStorage.getItem("theme");
   const theme = useSignal<"light" | "dark">(
     (storedTheme as "light" | "dark") || "dark"
   );
