@@ -8,10 +8,10 @@ export function ThemeToggle({ theme }: { theme: Signal<"light" | "dark"> }) {
       onClick={() => {
         if (theme.value === "light") {
           theme.value = "dark";
-          localStorage.setItem("theme", "dark");
+          window.localStorage.setItem("theme", "dark");
         } else {
           theme.value = "light";
-          localStorage.setItem("theme", "light");
+          window.localStorage.setItem("theme", "light");
         }
       }}
     >

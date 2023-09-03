@@ -22,11 +22,11 @@ const cleanExpr = (expr: string) =>
 
 export default function App() {
   // Expression
-  const storedExpr = localStorage.getItem("expr");
+  const storedExpr = window.localStorage.getItem("expr");
   const expression = useSignal<string>(storedExpr || "λx.λf.f (f x)");
 
   // Theme
-  const storedTheme = localStorage.getItem("theme");
+  const storedTheme = window.localStorage.getItem("theme");
   const theme = useSignal<"light" | "dark">(
     (storedTheme as "light" | "dark") || "dark"
   );
@@ -42,7 +42,7 @@ export default function App() {
     const expr = prettifyExpr(e.target.value);
     const prevExpr = expression.value;
     expression.value = expr;
-    localStorage.setItem("expr", expr);
+    window.localStorage.setItem("expr", expr);
     // Defer an update to the selection range
     setTimeout(() => e.target.setSelectionRange(caretStart, caretEnd), 0);
     // Parse expression
