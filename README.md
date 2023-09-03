@@ -2,6 +2,8 @@
 
 This project visualizes λ-calculi expressions as graphs.
 
+[Try it here](https://lambda-vis.deno.dev/).
+
 ![/screenshot.png](/screenshot.png)
 
 ### Usage
