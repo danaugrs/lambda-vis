@@ -21,7 +21,6 @@ const cleanExpr = (expr: string) =>
     .trim();
 
 export default function App() {
-
   // Expression
   const storedExpr = IS_BROWSER && window.localStorage.getItem("expr");
   const expression = useSignal<string>(storedExpr || "λx.λf.f (f x)");
@@ -112,7 +111,7 @@ export default function App() {
   return (
     <>
       <Head>
-        <title>Visualization of λ-Calculi Expressions</title>
+        <title>λ-Calculi Expression Visualizer</title>
       </Head>
       <div
         id="main"
@@ -125,7 +124,7 @@ export default function App() {
         }}
       >
         <div class="flex flex-row justify-between w-full space-x-1">
-          <p class="mb-2 text-xl">Visualization of λ-Calculi Expressions</p>
+          <p class="mb-2 text-xl">λ-Calculi Expression Visualizer</p>
           <div class="flex flex-row align-center space-x-1">
             <a
               class="h-8 w-8 flex items-center justify-center rounded border-1"
