@@ -147,7 +147,10 @@ export function draw(
           .attr("fill", "none");
       });
 
-      const maxX = boundVars.reduce((acc, v) => v.x > acc ? v.x : acc, 0);
+      const maxX = boundVars.reduce(
+        (acc, v) => v.x > acc ? v.x : acc,
+        -Infinity,
+      );
 
       if (boundVars.length > 0) {
         const path = d3.path();
