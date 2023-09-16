@@ -40,7 +40,7 @@ export function drawNode(
     .append("circle")
     .attr("cx", x)
     .attr("cy", y)
-    .attr("fill", theme === "light" ? "#FFF" : "#222")
+    .attr("fill", theme === "light" ? "#FFF" : "#1A1A1A")
     .attr("r", 15);
   svg
     .append("text")

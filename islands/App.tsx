@@ -123,7 +123,7 @@ export default function App() {
         class="w-screen h-screen p-2 flex flex-col"
         style={{
           color: theme.value === "light" ? "#000D" : "#FFFD",
-          background: theme.value === "light" ? "#FFF" : "#000D",
+          background: theme.value === "light" ? "#FAFAFA" : "#222",
           fontFamily:
             "Optima, Candara, 'Noto Sans', source-sans-pro, sans-serif",
         }}
@@ -147,24 +147,19 @@ export default function App() {
         </div>
         <p class="mb-4">Type a λ-calculi expression below. Backslash = λ.</p>
         <div class="flex gap-2 w-full flex-col flex-1 bg-inherit">
-          <div class="flex flex-row gap-2 items-stretch">
-            <input
-              placeholder="Type a λ-calculi expression"
-              onBlur={() => {
-                expression.value = cleanExpr(expression.value);
-              }}
-              class="border-1 w-full rounded p-2 text-xl"
-              style={{
-                borderColor: theme.value === "light" ? "#000D" : "#FFF6",
-                background: theme.value === "light" ? "#EEED" : "#0006",
-                color: expression.value.length && ast.value?.errs.length
-                  ? "red"
-                  : "inherit",
-              }}
-              value={expression.value}
-              onInput={onInput}
-            />
-          </div>
+          <input
+            placeholder="Type a λ-calculi expression"
+            onBlur={() => {
+              expression.value = cleanExpr(expression.value);
+            }}
+            class="border-1 w-full rounded p-2 text-xl h-[42px]"
+            style={{
+              borderColor: theme.value === "light" ? "#000D" : "#FFF6",
+              background: theme.value === "light" ? "white" : "#1A1A1A",
+            }}
+            value={expression.value}
+            onInput={onInput}
+          />
           <LambdaGraph theme={theme.value} />
         </div>
       </div>

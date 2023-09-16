@@ -108,7 +108,7 @@ export function Graph({ theme }: { theme: "light" | "dark" }) {
       class="rounded flex-1 w-full h-full bg-transparent border-1 select-none cursor-pointer"
       style={{
         borderColor: theme === "light" ? "#000D" : "#FFF6",
-        backgroundColor: "inherit",
+        background: theme === "light" ? "white" : "#1A1A1A",
       }}
     >
       <g id="zoom" transform={`scale(${scale.value})`}>
