@@ -158,6 +158,9 @@ export default function App() {
             style={{
               borderColor: theme.value === "light" ? "#000D" : "#FFF6",
               background: theme.value === "light" ? "white" : "#1A1A1A",
+              color: expression.value.length && ast.value?.errs.length
+                ? "red"
+                : "inherit",
             }}
             value={expression.value}
             onInput={onInput}
