@@ -1,7 +1,7 @@
 import {
+  abstraction,
   ASTKinds,
   ASTNodeIntf,
-  abstraction,
   group,
   main_1,
   start,
@@ -37,7 +37,7 @@ export function parseNode(
   env: Env,
   graph: Graph,
   parent: NodeID,
-  parentPort: string | null
+  parentPort: string | null,
 ): number {
   if (astNode.kind === ASTKinds.start) {
     // Root (simply pass through)
@@ -55,7 +55,13 @@ export function parseNode(
     };
     const nodeId = graph.push(node) - 1;
     node.func = parseNode((astNode as main_1).func, env, graph, nodeId, "func");
-    node.arg = parseNode((astNode as main_1).arg, { ...env }, graph, nodeId, "arg"); // copy env
+    node.arg = parseNode(
+      (astNode as main_1).arg,
+      { ...env },
+      graph,
+      nodeId,
+      "arg",
+    ); // copy env
     return nodeId;
   } else if (astNode.kind === ASTKinds.term_2) {
     // Identifier
@@ -88,7 +94,15 @@ export function parseNode(
     const nodeId = graph.push(node) - 1;
     // Store parameter in env
     env[(astNode as abstraction).parameter] = nodeId;
-    node.body = parseNode((astNode as abstraction).body, env, graph, nodeId, "body");
+    node.body = parseNode(
+      (astNode as abstraction).body,
+      env,
+      graph,
+      nodeId,
+      "body",
+    );
+    // Clear parameter from env
+    delete env[(astNode as abstraction).parameter];
     return nodeId;
   } else if (astNode.kind === ASTKinds.group) {
     // Group (simply pass through)
