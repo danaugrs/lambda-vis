@@ -144,6 +144,7 @@ export function Graph({ theme }: { theme: "light" | "dark" }) {
           />
           <g id="edgeGroup" />
           <g id="nodeGroup" />
+          <g id="highlightGroup" />
         </g>
       </g>
     </svg>

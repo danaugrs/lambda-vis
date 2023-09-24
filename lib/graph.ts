@@ -5,6 +5,7 @@ import { Node, NodeID } from "./runtime.ts";
 export const DIST_Y = 40;
 export const DIST_X = 25;
 export const RADIUS = 12;
+export const DEFAULT_S = 1.2 * DIST_X;
 
 // 8 ports equally distributed around the circle
 export type Port =
@@ -17,7 +18,7 @@ export type Port =
   | "w" // weast
   | "nw"; // north-west
 
-function portOffset(port: Port, s = 1.2 * DIST_X): { x: number; y: number } {
+function portOffset(port: Port, s = DEFAULT_S): { x: number; y: number } {
   if (port === "n") return { x: 0, y: -s };
   else if (port === "ne") return { x: Math.SQRT1_2 * s, y: -Math.SQRT1_2 * s };
   else if (port === "e") return { x: s, y: 0 };
@@ -55,6 +56,7 @@ export function drawNode(
 
 export function drawEdge(
   svg: d3.Selection<any, unknown, HTMLElement, any>,
+  highlightSvg: d3.Selection<any, unknown, HTMLElement, any>,
   startX: number,
   startY: number,
   startPort: Port,
@@ -62,7 +64,8 @@ export function drawEdge(
   endY: number,
   endPort: Port,
   theme: "light" | "dark",
-  s?: number
+  s?: number,
+  highlight = false
 ) {
   const path = d3.path();
   path.moveTo(startX, startY);
@@ -81,11 +84,21 @@ export function drawEdge(
     .attr("d", path.toString())
     .attr("stroke", theme === "light" ? "#222" : "#FFF")
     .attr("fill", "none");
+  if (highlight) {
+    highlightSvg
+      .append("path")
+      .attr("d", path.toString())
+      .attr("stroke", theme === "light" ? "#ffe00087" : "#fff60044")
+      .attr("stroke-width", "28px")
+      .attr("stroke-linecap", "round")
+      .attr("fill", "none");
+  }
 }
 
 export function draw(
   parentNodeGroup: d3.Selection<any, unknown, HTMLElement, any>,
   parentEdgeGroup: d3.Selection<any, unknown, HTMLElement, any>,
+  parentHighlightGroup: d3.Selection<any, unknown, HTMLElement, any>,
   graph: (Node & { drawn?: boolean })[],
   nodeId: NodeID,
   parentNodeId: NodeID,
@@ -98,6 +111,7 @@ export function draw(
   height: number;
   nodeGroup?: any;
   edgeGroup?: any;
+  highlightGroup?: any;
   vars: { x: number; y: number; name: string }[];
 } {
   if (nodeId === null || nodeId === "root") {
@@ -110,12 +124,15 @@ export function draw(
   nodeGroup.attr("id", nodeId);
   const edgeGroup = parentEdgeGroup.append("g");
   edgeGroup.attr("id", nodeId);
+  const highlightGroup = parentHighlightGroup.append("g");
+  highlightGroup.attr("id", nodeId);
 
   if (node.type === "abs") {
     if (node.parent === parentNodeId) {
       const { widthLeft, widthRight, height, vars } = draw(
         nodeGroup,
         edgeGroup,
+        highlightGroup,
         graph,
         node.body,
         nodeId,
@@ -130,7 +147,7 @@ export function draw(
         [[], []]
       );
 
-      drawEdge(edgeGroup, x, y, "s", x, y + DIST_Y, "n", theme);
+      drawEdge(edgeGroup, highlightGroup, x, y, "s", x, y + DIST_Y, "n", theme);
       drawNode(nodeGroup, x, y, `λ${node.param}`, theme);
 
       boundVars.forEach((v) => {
@@ -218,6 +235,7 @@ export function draw(
         vars: freeVars,
         nodeGroup,
         edgeGroup,
+        highlightGroup,
       };
     } else {
       // Variable node
@@ -229,6 +247,7 @@ export function draw(
         vars: [{ x, y, name: node.param }],
         nodeGroup,
         edgeGroup,
+        highlightGroup,
       };
     }
   } else if (node.type === "app") {
@@ -239,9 +258,11 @@ export function draw(
       vars: varsLeft,
       nodeGroup: nodeGroupLeft,
       edgeGroup: edgeGroupLeft,
+      highlightGroup: highlightGroupLeft,
     } = draw(
       nodeGroup,
       edgeGroup,
+      highlightGroup,
       graph,
       node.func,
       nodeId,
@@ -256,9 +277,11 @@ export function draw(
       vars: varsRight,
       nodeGroup: nodeGroupRight,
       edgeGroup: edgeGroupRight,
+      highlightGroup: highlightGroupRight,
     } = draw(
       nodeGroup,
       edgeGroup,
+      highlightGroup,
       graph,
       node.arg,
       nodeId,
@@ -268,18 +291,27 @@ export function draw(
     );
 
     const spread = (widthRightLeft + widthLeftRight) / 2;
+    const highlightEdge =
+      node.func !== null &&
+      node.func !== "root" &&
+      graph[node.func].type === "abs" &&
+      graph[node.func].parent === nodeId;
     drawEdge(
       edgeGroup,
+      highlightGroup,
       x,
       y,
       "sw",
       x - spread * DIST_X,
       y + DIST_Y,
       "n",
-      theme
+      theme,
+      DEFAULT_S,
+      highlightEdge
     );
     drawEdge(
       edgeGroup,
+      highlightGroup,
       x,
       y,
       "se",
@@ -292,11 +324,13 @@ export function draw(
 
     nodeGroupLeft?.attr("transform", `translate(${-spread * DIST_X}, 0)`);
     edgeGroupLeft?.attr("transform", `translate(${-spread * DIST_X}, 0)`);
+    highlightGroupLeft?.attr("transform", `translate(${-spread * DIST_X}, 0)`);
     varsLeft.forEach((v) => {
       v.x -= spread * DIST_X;
     });
     nodeGroupRight?.attr("transform", `translate(${spread * DIST_X}, 0)`);
     edgeGroupRight?.attr("transform", `translate(${spread * DIST_X}, 0)`);
+    highlightGroupRight?.attr("transform", `translate(${spread * DIST_X}, 0)`);
     varsRight.forEach((v) => {
       v.x += spread * DIST_X;
     });
@@ -308,6 +342,7 @@ export function draw(
       vars: [...varsLeft, ...varsRight],
       nodeGroup,
       edgeGroup,
+      highlightGroup,
     };
   }
   return {
@@ -317,5 +352,6 @@ export function draw(
     vars: [],
     nodeGroup,
     edgeGroup,
+    highlightGroup,
   };
 }

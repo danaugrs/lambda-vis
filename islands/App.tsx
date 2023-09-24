@@ -58,8 +58,10 @@ export default function App() {
       // Clear graph
       const nodeGroup = d3.select("#nodeGroup");
       const edgeGroup = d3.select("#edgeGroup");
+      const highlightGroup = d3.select("#highlightGroup");
       nodeGroup.selectAll("*").remove(); // Clear existing graph
       edgeGroup.selectAll("*").remove(); // Clear existing graph
+      highlightGroup.selectAll("*").remove(); // Clear existing graph
       return;
     }
     const newAst = parse(exprForParsing);
@@ -73,14 +75,17 @@ export default function App() {
     } else {
       const nodeGroup = d3.select("#nodeGroup");
       const edgeGroup = d3.select("#edgeGroup");
+      const highlightGroup = d3.select("#highlightGroup");
       nodeGroup.selectAll("*").remove(); // Clear existing graph
       edgeGroup.selectAll("*").remove(); // Clear existing graph
+      highlightGroup.selectAll("*").remove(); // Clear existing graph
       const graph: Graph = [];
       parseNode(newAst.ast!, {}, graph, "root", null);
       console.log("Graph: ", graph);
       const { widthLeft, widthRight, height } = draw(
         nodeGroup,
         edgeGroup,
+        highlightGroup,
         graph,
         0,
         "root",
@@ -102,6 +107,10 @@ export default function App() {
         `translate(${widthLeft * 25 * scale}, 0) scale(${scale})`,
       );
       edgeGroup?.attr(
+        "transform",
+        `translate(${widthLeft * 25 * scale}, 0) scale(${scale})`,
+      );
+      highlightGroup?.attr(
         "transform",
         `translate(${widthLeft * 25 * scale}, 0) scale(${scale})`,
       );
