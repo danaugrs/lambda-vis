@@ -8,6 +8,8 @@ import { ThemeToggle } from "../components/ThemeToggle.tsx";
 import { Graph as LambdaGraph } from "./Graph.tsx";
 import { Head, IS_BROWSER } from "$fresh/runtime.ts";
 
+const title = "λ-Calculi Expression Visualizer";
+
 const prettifyExpr = (expr: string) => expr.replaceAll("\\", "λ");
 const cleanExpr = (expr: string) =>
   expr
@@ -116,7 +118,7 @@ export default function App() {
   return (
     <>
       <Head>
-        <title>λ-Calculi Expression Visualizer</title>
+        <title>{title}</title>
       </Head>
       <div
         id="main"
@@ -129,7 +131,7 @@ export default function App() {
         }}
       >
         <div class="flex flex-row justify-between w-full space-x-1">
-          <p class="mb-2 text-xl">λ-Calculi Expression Visualizer</p>
+          <p class="mb-2 text-xl">{title}</p>
           <div class="flex flex-row align-center space-x-1">
             <a
               class="h-8 w-8 flex items-center justify-center rounded border-1"
