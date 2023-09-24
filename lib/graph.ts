@@ -212,8 +212,8 @@ export function draw(
         .attr("stroke-dasharray", "4,6")
         .attr("fill", "none");
       return {
-        widthLeft: widthLeft + 1,
-        widthRight: widthRight + 1,
+        widthLeft: widthLeft + 0.5,
+        widthRight: widthRight + 0.5,
         height: height + 2,
         vars: freeVars,
         nodeGroup,
