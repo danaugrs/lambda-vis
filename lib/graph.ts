@@ -82,14 +82,46 @@ class GraphNode {
 class GraphEdge {
   startNode: GraphNode;
   startOffset: { x: number; y: number } = { x: 0, y: 0 };
+  startDelta: { x: number; y: number } = { x: 0, y: 0 }; // Bezier curve control point
   endNode: GraphNode;
   endOffset: { x: number; y: number } = { x: 0, y: 0 };
+  endDelta: { x: number; y: number } = { x: 0, y: 0 }; // Bezier curve control point
   _svg: SVG[] = []; // A sequence of SVG nodes, each representing a layer
   //waypoints: { x: 0; y: 0 }[] = [];
 
   constructor(startNode: GraphNode, endNode: GraphNode) {
     this.startNode = startNode;
     this.endNode = endNode;
+  }
+
+  update() {
+    const path = d3.path();
+    const startX = this.startNode.x + this.startOffset.x;
+    const startY = this.startNode.y + this.startOffset.y;
+    const endX = this.endNode.x + this.endOffset.x;
+    const endY = this.endNode.y + this.endOffset.y;
+    path.moveTo(startX, startY);
+    path.bezierCurveTo(
+      startX + this.startDelta.x,
+      startY + this.startDelta.y,
+      endX + this.endDelta.x,
+      endY + this.endDelta.y,
+      endX,
+      endY
+    );
+    d3.create("path")
+      .attr("d", path.toString())
+      .attr("stroke", /* theme === "light" ? "#222" :  */ "#FFF") // TODO: theming
+      .attr("fill", "none");
+    // if (highlight) {
+    //   highlightSvg
+    //     .append("path")
+    //     .attr("d", path.toString())
+    //     .attr("stroke", theme === "light" ? "#ffe00087" : "#fff60044")
+    //     .attr("stroke-width", "28px")
+    //     .attr("stroke-linecap", "round")
+    //     .attr("fill", "none");
+    // }
   }
 
   get svg() {
