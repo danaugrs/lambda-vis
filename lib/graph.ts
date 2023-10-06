@@ -18,6 +18,85 @@ export type Port =
   | "w" // weast
   | "nw"; // north-west
 
+// The type of an SVG node.
+type SVG = d3.Selection<SVGElement, unknown, HTMLElement, unknown>;
+
+// The type of a graph node.
+// "simple" is a node with a borderless circle and a label.
+// "fan" is a wide triangle with a label.
+// "fin" is a narrow triangle with a label.
+// "eraser" is a circle with an X.
+type GraphNodeType = "simple" | "fan" | "fin" | "eraser";
+
+class GraphNode {
+  _x = 0; // The x coordinate of the node
+  _y = 0; // The y coordinate of the node
+  _label = ""; // The label of the node
+  _svg: SVG[] = []; // A sequence of SVG nodes, each representing a layer
+  readonly type: GraphNodeType | null; // The type of the node
+  children: GraphNode[] = []; // The children of the node
+  edges: GraphEdge[] = []; // The edges connected to this node
+
+  constructor(type: GraphNodeType | null) {
+    this.type = type;
+    if (type === "simple") {
+      // TODO
+    } else if (type === "fan") {
+      // TODO
+    } else if (type === "fin") {
+      // TODO
+    } else if (type === "eraser") {
+      // TODO
+    }
+  }
+
+  get x() {
+    return this._x;
+  }
+  set x(value) {
+    this._x = value;
+    // update this node's svgs.
+    // loop through the edges and update the appropriate edge side of each edge.
+  }
+
+  get y() {
+    return this._y;
+  }
+  set y(value) {
+    this._y = value;
+  }
+
+  get label() {
+    return this._label;
+  }
+  set label(value) {
+    this._label = value;
+  }
+
+  get svg() {
+    return this._svg;
+  }
+}
+
+// A graph edge connects two nodes.
+class GraphEdge {
+  startNode: GraphNode;
+  startOffset: { x: number; y: number } = { x: 0, y: 0 };
+  endNode: GraphNode;
+  endOffset: { x: number; y: number } = { x: 0, y: 0 };
+  _svg: SVG[] = []; // A sequence of SVG nodes, each representing a layer
+  //waypoints: { x: 0; y: 0 }[] = [];
+
+  constructor(startNode: GraphNode, endNode: GraphNode) {
+    this.startNode = startNode;
+    this.endNode = endNode;
+  }
+
+  get svg() {
+    return this._svg;
+  }
+}
+
 function portOffset(port: Port, s = DEFAULT_S): { x: number; y: number } {
   if (port === "n") return { x: 0, y: -s };
   else if (port === "ne") return { x: Math.SQRT1_2 * s, y: -Math.SQRT1_2 * s };
