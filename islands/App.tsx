@@ -28,6 +28,7 @@ const cleanExpr = (expr: string) =>
 enum ReductionMethod {
   NaiveCopyingTree = "Naive Copying (Tree)",
   NaiveCopyingGraph = "Naive Copying (Graph)",
+  MaximalFreeSubgraphSharing = "Maximal Free Subgraph Sharing",
   BracketsAndCroissants = "Brackets & Croissants",
   Lambdascope = "Lambdascope",
   LambdaNets = "λ-Nets",
@@ -227,10 +228,16 @@ export default function App() {
                   </option>
                 </optgroup>
                 <optgroup label="Suboptimal">
-                  <option value={ReductionMethod.NaiveCopyingTree} selected>
-                    Naive Copying (Graph)
+                  <option
+                    value={ReductionMethod.MaximalFreeSubgraphSharing}
+                    selected
+                  >
+                    Maximal Free Subgraph Sharing (1971)
                   </option>
                   <option value={ReductionMethod.NaiveCopyingGraph} selected>
+                    Naive Copying (Graph)
+                  </option>
+                  <option value={ReductionMethod.NaiveCopyingTree} selected>
                     Naive Copying (Tree)
                   </option>
                 </optgroup>
