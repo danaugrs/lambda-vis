@@ -25,10 +25,21 @@ const cleanExpr = (expr: string) =>
     .replace(/\s\s+/g, " ") // combine adjacent spaces
     .trim();
 
+enum ReductionMethod {
+  NaiveCopying = "Naive Copying",
+  BracketsAndCroissants = "Brackets & Croissants",
+  Lambdascope = "Lambdascope",
+  LambdaNets = "λ-Nets",
+  FNets = "ƒ-Nets",
+}
+
 export default function App() {
   // Expression
   const storedExpr = IS_BROWSER && window.localStorage.getItem("expr");
   const expression = useSignal<string>(storedExpr || "λx.λf.f (f x)");
+
+  // Reduction method
+  const method = useSignal<ReductionMethod>(ReductionMethod.NaiveCopying);
 
   // Theme
   const storedTheme = IS_BROWSER && window.localStorage.getItem("theme");
@@ -187,17 +198,32 @@ export default function App() {
             />
             <div class="flex flex-col sm:flex-row gap-2">
               <select
+                onChange={(e) => {
+                  method.value = (e?.target as HTMLSelectElement)
+                    .value as ReductionMethod;
+                }}
+                value={method.value}
                 class="border-1 rounded p-2 text-xl h-[42px] bg-inherit flex-1"
                 style={{
                   borderColor: theme.value === "light" ? "#000D" : "#FFF6",
                   background: theme.value === "light" ? "white" : "#1A1A1A",
                 }}
               >
-                <option>ƒ-Nets (2023, mine)</option>
-                <option>λ-Nets (2023, mine)</option>
-                <option>Lambdascope (2004)</option>
-                <option>Brackets & Croissants (1992)</option>
-                <option selected>Naive Copying (1971)</option>
+                <option value={ReductionMethod.FNets}>
+                  ƒ-Nets (2023, mine)
+                </option>
+                <option value={ReductionMethod.LambdaNets}>
+                  λ-Nets (2023, mine)
+                </option>
+                <option value={ReductionMethod.Lambdascope}>
+                  Lambdascope (2004)
+                </option>
+                <option value={ReductionMethod.BracketsAndCroissants}>
+                  Brackets & Croissants (1992)
+                </option>
+                <option value={ReductionMethod.NaiveCopying} selected>
+                  Naive Copying (1971)
+                </option>
               </select>
               <div class="flex flex-row gap-2">
                 <button
