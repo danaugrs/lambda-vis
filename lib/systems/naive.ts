@@ -17,7 +17,7 @@ Common Graph Rendering Primitives (used by all systems)
 
 
 
-function astToGraph(ast: AST): Graph {
+function render(ast: AST) {
     const graph: Graph = [];
     const env: Env = {};
     parseNode(ast, env, graph, null, null);

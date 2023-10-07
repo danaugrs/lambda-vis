@@ -26,7 +26,8 @@ const cleanExpr = (expr: string) =>
     .trim();
 
 enum ReductionMethod {
-  NaiveCopying = "Naive Copying",
+  NaiveCopyingTree = "Naive Copying (Tree)",
+  NaiveCopyingGraph = "Naive Copying (Graph)",
   BracketsAndCroissants = "Brackets & Croissants",
   Lambdascope = "Lambdascope",
   LambdaNets = "λ-Nets",
@@ -209,21 +210,30 @@ export default function App() {
                   background: theme.value === "light" ? "white" : "#1A1A1A",
                 }}
               >
-                <option value={ReductionMethod.FNets}>
-                  ƒ-Nets (2023, mine)
-                </option>
-                <option value={ReductionMethod.LambdaNets}>
-                  λ-Nets (2023, mine)
-                </option>
-                <option value={ReductionMethod.Lambdascope}>
-                  Lambdascope (2004)
-                </option>
-                <option value={ReductionMethod.BracketsAndCroissants}>
-                  Brackets & Croissants (1992)
-                </option>
-                <option value={ReductionMethod.NaiveCopying} selected>
-                  Naive Copying (1971)
-                </option>
+                <optgroup label="Optimal">
+                  <option value={ReductionMethod.FNets}>
+                    ƒ-Nets (2023, mine)
+                  </option>
+                  <option value={ReductionMethod.LambdaNets}>
+                    λ-Nets (2023, mine)
+                  </option>
+                </optgroup>
+                <optgroup label="Beta-Optimal">
+                  <option value={ReductionMethod.Lambdascope}>
+                    Lambdascope (2004)
+                  </option>
+                  <option value={ReductionMethod.BracketsAndCroissants}>
+                    Brackets & Croissants (1992)
+                  </option>
+                </optgroup>
+                <optgroup label="Suboptimal">
+                  <option value={ReductionMethod.NaiveCopyingTree} selected>
+                    Naive Copying (Graph)
+                  </option>
+                  <option value={ReductionMethod.NaiveCopyingGraph} selected>
+                    Naive Copying (Tree)
+                  </option>
+                </optgroup>
               </select>
               <div class="flex flex-row gap-2">
                 <button
