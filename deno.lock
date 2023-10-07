@@ -285,6 +285,8 @@
     "https://deno.land/x/fresh@1.4.3/versions.json": "5a7fe5344ef7ce94ae70baaf7cf7e6f00414f936905fa53774733605050c28ff",
     "https://deno.land/x/importmap@0.2.1/_util.ts": "ada9a9618b537e6c0316c048a898352396c882b9f2de38aba18fd3f2950ede89",
     "https://deno.land/x/importmap@0.2.1/mod.ts": "ae3d1cd7eabd18c01a4960d57db471126b020f23b37ef14e1359bbb949227ade",
+    "https://deno.land/x/tabler_icons_tsx@0.0.5/tsx/arrow-left.tsx": "ae68ead9cbe3790a2370dddf448b53c2f567ccd531bf9c83476f5bc51250abaf",
+    "https://deno.land/x/tabler_icons_tsx@0.0.5/tsx/arrow-right.tsx": "266dbbf138a7937be892bb9ebf70c6c920112cba6c44526570a0cdb7810cc31e",
     "https://deno.land/x/ts_morph@17.0.1/common/DenoRuntime.ts": "537800e840d0994f9055164e11bf33eadf96419246af0d3c453793c3ae67bdb3",
     "https://deno.land/x/ts_morph@17.0.1/common/mod.ts": "01985d2ee7da8d1caee318a9d07664774fbee4e31602bc2bb6bb62c3489555ed",
     "https://deno.land/x/ts_morph@17.0.1/common/ts_morph_common.js": "49a79124b941ba2b35d81ac9eb90fc33c957b2640cdb97569c1941bac5a3bbdb",

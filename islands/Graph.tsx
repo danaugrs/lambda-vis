@@ -1,6 +1,7 @@
 import { JSX } from "preact";
 import { batch, useSignal } from "@preact/signals";
 import { useEffect } from "preact/hooks";
+import * as d3 from "d3";
 
 export function Graph({ theme }: { theme: "light" | "dark" }) {
   const state = useSignal<"none" | "pan">("none");
@@ -14,6 +15,22 @@ export function Graph({ theme }: { theme: "light" | "dark" }) {
   // Set up event listeners
   useEffect(() => {
     const graph = document.getElementById("graph")!;
+
+    // temp test
+    const someText = d3
+      .create("svg:text")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("text-anchor", "middle")
+      .attr("dominant-baseline", "middle")
+      .attr("fill", theme === "light" ? "#222" : "#FFF")
+      // .attr("stroke", "blue")
+      // .attr("fill", "red")
+      .style("font-size", "20px")
+      .text("SOME TEXT");
+    document.getElementById("0")!.append(someText.node()!);
+
+    someText.text("OTHER")
 
     // Press group
     const press = (e: any) => {

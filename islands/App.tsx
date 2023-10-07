@@ -8,8 +8,10 @@ import { ThemeToggle } from "../components/ThemeToggle.tsx";
 import { Graph as LambdaGraph } from "./Graph.tsx";
 import { Head, IS_BROWSER } from "$fresh/runtime.ts";
 import { parseExpr } from "../lib/ast.ts";
+import IconArrowLeft from "https://deno.land/x/tabler_icons_tsx@0.0.5/tsx/arrow-left.tsx";
+import IconArrowRight from "https://deno.land/x/tabler_icons_tsx@0.0.5/tsx/arrow-right.tsx";
 
-const title = "λ-Calculi Expression Visualizer";
+const title = "Interactive Visualization of λ-Calculi Graph Reduction";
 
 const prettifyExpr = (expr: string) => expr.replaceAll("\\", "λ");
 const cleanExpr = (expr: string) =>
@@ -143,7 +145,9 @@ export default function App() {
         }}
       >
         <div class="flex flex-row justify-between w-full space-x-1">
-          <p class="mb-2 text-xl">{title}</p>
+          <p class="mb-2 text-xl">
+            {title} (<a href="#" class="underline">read the paper</a>)
+          </p>
           <div class="flex flex-row align-center space-x-1">
             <a
               class="h-8 w-8 flex items-center justify-center rounded border-1"
@@ -159,24 +163,72 @@ export default function App() {
             <ThemeToggle theme={theme} />
           </div>
         </div>
-        <p class="mb-4">Type a λ-calculi expression below. Backslash = λ.</p>
+        <p class="mb-2">
+          Type a λ-calculi expression below (backslash = λ). Click on
+          highlighted nodes to reduce them.
+        </p>
         <div class="flex gap-2 w-full flex-col flex-1 bg-inherit">
-          <input
-            placeholder="Type a λ-calculi expression"
-            onBlur={() => {
-              expression.value = cleanExpr(expression.value);
-            }}
-            class="border-1 w-full rounded p-2 text-xl h-[42px]"
-            style={{
-              borderColor: theme.value === "light" ? "#000D" : "#FFF6",
-              background: theme.value === "light" ? "white" : "#1A1A1A",
-              color: expression.value.length && ast.value?.errs.length
-                ? "red"
-                : "inherit",
-            }}
-            value={expression.value}
-            onInput={onInput}
-          />
+          <div class="flex flex-col sm:flex-row justify-between bg-inherit gap-2">
+            <input
+              placeholder="Type a λ-calculi expression"
+              onBlur={() => {
+                expression.value = cleanExpr(expression.value);
+              }}
+              class="border-1 w-full rounded p-2 text-xl h-[42px]"
+              style={{
+                borderColor: theme.value === "light" ? "#000D" : "#FFF6",
+                background: theme.value === "light" ? "white" : "#1A1A1A",
+                color: expression.value.length && ast.value?.errs.length
+                  ? "red"
+                  : "inherit",
+              }}
+              value={expression.value}
+              onInput={onInput}
+            />
+            <select
+              class="border-1 rounded p-2 text-xl h-[42px] bg-inherit"
+              style={{
+                borderColor: theme.value === "light" ? "#000D" : "#FFF6",
+                background: theme.value === "light" ? "white" : "#1A1A1A",
+              }}
+            >
+              <option>ƒ-Nets (2023, mine)</option>
+              <option>λ-Nets (2023, mine)</option>
+              <option>Lambdascope (2004)</option>
+              <option>Brackets & Croissants (1992)</option>
+              <option selected>Naive Copying (1971)</option>
+            </select>
+            <div class="flex flex-row gap-2">
+              <button
+                class="border-1 rounded p-2 text-xl h-[42px] bg-inherit flex-1 sm:flex-none flex flex-row justify-center"
+                style={{
+                  borderColor: theme.value === "light" ? "#000D" : "#FFF6",
+                  background: theme.value === "light" ? "white" : "#1A1A1A",
+                }}
+              >
+                <IconArrowLeft />
+              </button>
+              <div
+                class="border-1 rounded p-2 text-xl h-[42px] bg-inherit"
+                style={{
+                  borderColor: theme.value === "light" ? "#000D" : "#FFF6",
+                  background: theme.value === "light" ? "white" : "#1A1A1A",
+                }}
+              >
+                3/32
+              </div>
+              <button
+                disabled
+                class="border-1 rounded p-2 text-xl h-[42px] bg-inherit flex-1 sm:flex-none flex flex-row justify-center"
+                style={{
+                  borderColor: theme.value === "light" ? "#000D" : "#FFF6",
+                  background: theme.value === "light" ? "white" : "#1A1A1A",
+                }}
+              >
+                <IconArrowRight color="gray" />
+              </button>
+            </div>
+          </div>
           <LambdaGraph theme={theme.value} />
         </div>
       </div>
