@@ -30,6 +30,7 @@ enum ReductionMethod {
   NaiveCopyingGraph = "Naive Copying (Graph)",
   MaximalFreeSubgraphSharing = "Maximal Free Subgraph Sharing",
   BracketsAndCroissants = "Brackets & Croissants",
+  Lampings = "Lamping's",
   Lambdascope = "Lambdascope",
   LambdaNets = "λ-Nets",
   FNets = "ƒ-Nets",
@@ -226,9 +227,13 @@ export default function App() {
                   <option value={ReductionMethod.BracketsAndCroissants}>
                     Brackets & Croissants (1992)
                   </option>
+                  <option disabled value={ReductionMethod.Lampings} selected>
+                    Lamping's (1989)
+                  </option>
                 </optgroup>
                 <optgroup label="Suboptimal">
                   <option
+                    disabled
                     value={ReductionMethod.MaximalFreeSubgraphSharing}
                     selected
                   >
