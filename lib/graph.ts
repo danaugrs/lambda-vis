@@ -29,13 +29,32 @@ type SVG = d3.Selection<SVGElement, unknown, HTMLElement, unknown>;
 type GraphNodeType = "simple" | "fan" | "fin" | "eraser";
 
 class GraphNode {
-  _x = 0; // The x coordinate of the node
-  _y = 0; // The y coordinate of the node
-  _label = ""; // The label of the node
-  _svg: SVG[] = []; // A sequence of SVG nodes, each representing a layer
-  readonly type: GraphNodeType | null; // The type of the node
-  children: GraphNode[] = []; // The children of the node
-  edges: GraphEdge[] = []; // The edges connected to this node
+  // The x coordinate of the node relative to its parent
+  _x = 0;
+
+  // The y coordinate of the node relative to its parent
+  _y = 0;
+
+  // The label of the node
+  _label = "";
+
+  // The theme of the node
+  _theme: "light" | "dark" = "dark";
+
+  // Debug
+  _debug = true;
+
+  // A sequence of SVG nodes, each representing a layer (from deepest to shallowest)
+  _svg: SVG[] = [];
+
+  // The type of the node. `null` means this is a container or graph and only children are rendered.
+  readonly type: GraphNodeType | null;
+
+  // The children of the node
+  children: GraphNode[] = [];
+
+  // The edges connected to this node
+  edges: GraphEdge[] = [];
 
   constructor(type: GraphNodeType | null) {
     this.type = type;
@@ -53,6 +72,8 @@ class GraphNode {
   get x() {
     return this._x;
   }
+
+  // Sets the local x coordinate of this node, relative to its parent
   set x(value) {
     this._x = value;
     // update this node's svgs.
@@ -62,19 +83,27 @@ class GraphNode {
   get y() {
     return this._y;
   }
+
+  // Sets the local y coordinate of this node, relative to its parent
   set y(value) {
     this._y = value;
   }
 
-  get label() {
-    return this._label;
+  get theme() {
+    return this._theme;
   }
-  set label(value) {
-    this._label = value;
+  set theme(value) {
+    this._theme = value;
   }
 
   get svg() {
     return this._svg;
+  }
+
+  get boundingBox() {
+    // includes the bounding boxes of all descendants
+    // TODO
+    return { x0: 0, y0: 0, x1: 0, y1: 0 };
   }
 }
 
@@ -88,6 +117,12 @@ class GraphEdge {
   endDelta: { x: number; y: number } = { x: 0, y: 0 }; // Bezier curve control point
   _svg: SVG[] = []; // A sequence of SVG nodes, each representing a layer
   //waypoints: { x: 0; y: 0 }[] = [];
+
+  // The theme of the node
+  _theme: "light" | "dark" = "dark";
+
+  // Debug
+  _debug = true;
 
   constructor(startNode: GraphNode, endNode: GraphNode) {
     this.startNode = startNode;
@@ -124,8 +159,27 @@ class GraphEdge {
     // }
   }
 
+  get theme() {
+    return this._theme;
+  }
+  set theme(value) {
+    this._theme = value;
+  }
+
   get svg() {
     return this._svg;
+  }
+}
+
+// Creates `GraphNode`s and `GraphEdges`s and add their SVGs into the `svg` at the appropriate places.
+export function renderGraph(
+  graph: Node[],
+  nodeId: NodeID,
+  svg: SVG,
+  theme: "light" | "dark"
+) {
+  if (nodeId === null || nodeId === "root") {
+    return { widthLeft: 0, widthRight: 0, height: 0, vars: [] };
   }
 }
 
@@ -210,7 +264,7 @@ export function draw(
   parentNodeGroup: d3.Selection<any, unknown, HTMLElement, any>,
   parentEdgeGroup: d3.Selection<any, unknown, HTMLElement, any>,
   parentHighlightGroup: d3.Selection<any, unknown, HTMLElement, any>,
-  graph: (Node & { drawn?: boolean })[],
+  graph: Node[],
   nodeId: NodeID,
   parentNodeId: NodeID,
   x: number,

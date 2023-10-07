@@ -145,6 +145,14 @@ export function Graph({ theme }: { theme: "light" | "dark" }) {
           <g id="edgeGroup" />
           <g id="nodeGroup" />
           <g id="highlightGroup" />
+          {/* Layers */}
+          <g id="0" />
+          <g id="1" />
+          <g id="2" />
+          <g id="3" />
+          <g id="4" />
+          <g id="5" />
+          <g id="6" />
         </g>
       </g>
     </svg>
