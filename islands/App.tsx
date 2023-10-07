@@ -168,7 +168,7 @@ export default function App() {
           highlighted nodes to reduce them.
         </p>
         <div class="flex gap-2 w-full flex-col flex-1 bg-inherit">
-          <div class="flex flex-col sm:flex-row justify-between bg-inherit gap-2">
+          <div class="flex flex-col md:flex-row justify-between bg-inherit gap-2">
             <input
               placeholder="Type a λ-calculi expression"
               onBlur={() => {
@@ -185,48 +185,50 @@ export default function App() {
               value={expression.value}
               onInput={onInput}
             />
-            <select
-              class="border-1 rounded p-2 text-xl h-[42px] bg-inherit"
-              style={{
-                borderColor: theme.value === "light" ? "#000D" : "#FFF6",
-                background: theme.value === "light" ? "white" : "#1A1A1A",
-              }}
-            >
-              <option>ƒ-Nets (2023, mine)</option>
-              <option>λ-Nets (2023, mine)</option>
-              <option>Lambdascope (2004)</option>
-              <option>Brackets & Croissants (1992)</option>
-              <option selected>Naive Copying (1971)</option>
-            </select>
-            <div class="flex flex-row gap-2">
-              <button
-                class="border-1 rounded p-2 text-xl h-[42px] bg-inherit flex-1 sm:flex-none flex flex-row justify-center"
+            <div class="flex flex-col sm:flex-row gap-2">
+              <select
+                class="border-1 rounded p-2 text-xl h-[42px] bg-inherit flex-1"
                 style={{
                   borderColor: theme.value === "light" ? "#000D" : "#FFF6",
                   background: theme.value === "light" ? "white" : "#1A1A1A",
                 }}
               >
-                <IconArrowLeft />
-              </button>
-              <div
-                class="border-1 rounded p-2 text-xl h-[42px] bg-inherit"
-                style={{
-                  borderColor: theme.value === "light" ? "#000D" : "#FFF6",
-                  background: theme.value === "light" ? "white" : "#1A1A1A",
-                }}
-              >
-                3/32
+                <option>ƒ-Nets (2023, mine)</option>
+                <option>λ-Nets (2023, mine)</option>
+                <option>Lambdascope (2004)</option>
+                <option>Brackets & Croissants (1992)</option>
+                <option selected>Naive Copying (1971)</option>
+              </select>
+              <div class="flex flex-row gap-2">
+                <button
+                  class="border-1 rounded p-2 text-xl h-[42px] bg-inherit flex-1 sm:flex-none flex flex-row justify-center"
+                  style={{
+                    borderColor: theme.value === "light" ? "#000D" : "#FFF6",
+                    background: theme.value === "light" ? "white" : "#1A1A1A",
+                  }}
+                >
+                  <IconArrowLeft />
+                </button>
+                <div
+                  class="border-1 rounded p-2 text-xl h-[42px] bg-inherit"
+                  style={{
+                    borderColor: theme.value === "light" ? "#000D" : "#FFF6",
+                    background: theme.value === "light" ? "white" : "#1A1A1A",
+                  }}
+                >
+                  3/32
+                </div>
+                <button
+                  disabled
+                  class="border-1 rounded p-2 text-xl h-[42px] bg-inherit flex-1 sm:flex-none flex flex-row justify-center"
+                  style={{
+                    borderColor: theme.value === "light" ? "#000D" : "#FFF6",
+                    background: theme.value === "light" ? "white" : "#1A1A1A",
+                  }}
+                >
+                  <IconArrowRight color="gray" />
+                </button>
               </div>
-              <button
-                disabled
-                class="border-1 rounded p-2 text-xl h-[42px] bg-inherit flex-1 sm:flex-none flex flex-row justify-center"
-                style={{
-                  borderColor: theme.value === "light" ? "#000D" : "#FFF6",
-                  background: theme.value === "light" ? "white" : "#1A1A1A",
-                }}
-              >
-                <IconArrowRight color="gray" />
-              </button>
             </div>
           </div>
           <LambdaGraph theme={theme.value} />
