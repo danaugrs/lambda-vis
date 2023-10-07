@@ -7,6 +7,7 @@ import * as d3 from "d3";
 import { ThemeToggle } from "../components/ThemeToggle.tsx";
 import { Graph as LambdaGraph } from "./Graph.tsx";
 import { Head, IS_BROWSER } from "$fresh/runtime.ts";
+import { parseExpr } from "../lib/ast.ts";
 
 const title = "λ-Calculi Expression Visualizer";
 
@@ -65,6 +66,8 @@ export default function App() {
       return;
     }
     const newAst = parse(exprForParsing);
+    const NEW_AST = parseExpr(exprForParsing);
+    console.log("NEW_AST", NEW_AST);
     // Update AST
     ast.value = newAst;
     if (newAst.errs.length) {
