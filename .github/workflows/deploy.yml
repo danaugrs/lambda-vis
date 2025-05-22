@@ -30,7 +30,7 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "lambda-vis"
-          entrypoint: "visualizer/main.ts"
-          root: "visualizer/"
+          entrypoint: "main.ts"
+          root: ""
           
           
